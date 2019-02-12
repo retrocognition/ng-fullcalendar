@@ -1,10 +1,6 @@
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('jquery'), require('fullcalendar')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', 'jquery', 'fullcalendar'], factory) :
-	(factory((global.ngFullcalendar = global.ngFullcalendar || {}),global.ng.core,global.jQuery));
-}(this, (function (exports,_angular_core,$) { 'use strict';
-
-$ = 'default' in $ ? $['default'] : $;
+import { Component, ElementRef, EventEmitter, Input, NgModule, NgZone, Output } from '@angular/core';
+import $ from 'jquery';
+import 'fullcalendar';
 
 /**
  * @fileoverview added by tsickle
@@ -36,36 +32,21 @@ var CalendarComponent = /** @class */ (function () {
         this.element = element;
         this.zone = zone;
         this._reRender = true;
-        // Notify when things change
-        this.eventsModelChange = new _angular_core.EventEmitter();
-        // Various events
-        this.eventDrop = new _angular_core.EventEmitter();
-        this.eventResize = new _angular_core.EventEmitter();
-        this.eventResizeStart = new _angular_core.EventEmitter();
-        this.eventResizeStop = new _angular_core.EventEmitter();
-        this.eventClick = new _angular_core.EventEmitter();
-        this.clickButton = new _angular_core.EventEmitter();
-        this.windowResize = new _angular_core.EventEmitter();
-        this.viewRender = new _angular_core.EventEmitter();
-        this.eventAfterRender = new _angular_core.EventEmitter();
-        this.eventAfterAllRender = new _angular_core.EventEmitter();
-        this.viewDestroy = new _angular_core.EventEmitter();
-        this.eventRender = new _angular_core.EventEmitter();
-        this.eventDestroy = new _angular_core.EventEmitter();
-        this.eventMouseOver = new _angular_core.EventEmitter();
-        this.eventMouseOut = new _angular_core.EventEmitter();
-        this.initialized = new _angular_core.EventEmitter();
-        this.select = new _angular_core.EventEmitter();
-        this.unselect = new _angular_core.EventEmitter();
-        this.dayClick = new _angular_core.EventEmitter();
-        this.navLinkDayClick = new _angular_core.EventEmitter();
-        this.navLinkWeekClick = new _angular_core.EventEmitter();
-        this.eventDragStart = new _angular_core.EventEmitter();
-        this.eventDragStop = new _angular_core.EventEmitter();
-        this.drop = new _angular_core.EventEmitter();
-        this.eventReceive = new _angular_core.EventEmitter();
-        this.dayRender = new _angular_core.EventEmitter();
-        this.resourceRender = new _angular_core.EventEmitter();
+        this.eventsModelChange = new EventEmitter();
+        this.eventDrop = new EventEmitter();
+        this.eventResize = new EventEmitter();
+        this.eventClick = new EventEmitter();
+        this.clickButton = new EventEmitter();
+        this.windowResize = new EventEmitter();
+        this.viewRender = new EventEmitter();
+        this.viewDestroy = new EventEmitter();
+        this.eventRender = new EventEmitter();
+        this.initialized = new EventEmitter();
+        this.select = new EventEmitter();
+        this.unselect = new EventEmitter();
+        this.dayClick = new EventEmitter();
+        this.navLinkDayClick = new EventEmitter();
+        this.navLinkWeekClick = new EventEmitter();
     }
     Object.defineProperty(CalendarComponent.prototype, "eventsModel", {
         get: /**
@@ -113,7 +94,7 @@ var CalendarComponent = /** @class */ (function () {
             _this.updaterOptions();
             _this.zone.runOutsideAngular(function () {
                 $(_this.element.nativeElement).fullCalendar(_this.options);
-                _this._eventsModel = _this.options.events;
+                _this._eventsModel = /** @type {?} */ (_this.options.events);
                 _this.eventsModelChange.next(_this.options.events);
                 _this.initialized.emit(true);
                 // Click listeners
@@ -121,10 +102,10 @@ var CalendarComponent = /** @class */ (function () {
                 $('[class ^="fc"][class *="button"]').click(function (el) {
                     var /** @type {?} */ classnames = el.currentTarget.className.split(' ');
                     classnames.forEach(function (name) {
-                        if (name.indexOf('button') == name.length - 6) {
+                        if (name.indexOf('button') === name.length - 6) {
                             name = name.replace(/fc|button|-/g, '');
-                            if (name != '') {
-                                // this.renderEvents(this._eventsModel);
+                            if (name !== '') {
+                                _this.renderEvents(_this._eventsModel);
                                 eventDispatch(name);
                             }
                         }
@@ -210,26 +191,6 @@ var CalendarComponent = /** @class */ (function () {
                 elem[i].dispatchEvent(widgetEvent);
             }
         };
-        this.options.eventResizeStart = function (event, jsEvent, ui, view) {
-            var /** @type {?} */ detail = {
-                event: event, jsEvent: jsEvent, ui: ui, view: view
-            };
-            var /** @type {?} */ widgetEvent = new CustomEvent('eventResizeStart', {
-                bubbles: true,
-                detail: detail
-            });
-            elem[0].dispatchEvent(widgetEvent);
-        };
-        this.options.eventResizeStop = function (event, jsEvent, ui, view) {
-            var /** @type {?} */ detail = {
-                event: event, jsEvent: jsEvent, ui: ui, view: view
-            };
-            var /** @type {?} */ widgetEvent = new CustomEvent('eventResizeStop', {
-                bubbles: true,
-                detail: detail
-            });
-            elem[0].dispatchEvent(widgetEvent);
-        };
         this.options.eventRender = function (event, element, view) {
             var /** @type {?} */ detail = { event: event, element: element, view: view };
             var /** @type {?} */ widgetEvent = new CustomEvent('eventRender', {
@@ -239,22 +200,6 @@ var CalendarComponent = /** @class */ (function () {
             for (var /** @type {?} */ i = 0; i < elem.length; i++) {
                 elem[i].dispatchEvent(widgetEvent);
             }
-        };
-        this.options.eventDestroy = function (event, element, view) {
-            var /** @type {?} */ detail = { event: event, element: element, view: view };
-            var /** @type {?} */ widgetEvent = new CustomEvent('eventDestroy', {
-                bubbles: true,
-                detail: detail
-            });
-            elem[0].dispatchEvent(widgetEvent);
-        };
-        this.options.eventAfterRender = function (event, element, view) {
-            var /** @type {?} */ detail = { event: event, element: element, view: view };
-            var /** @type {?} */ widgetEvent = new CustomEvent('eventAfterRender', {
-                bubbles: true,
-                detail: detail
-            });
-            elem[0].dispatchEvent(widgetEvent);
         };
         this.options.eventClick = function (event) {
             var /** @type {?} */ detail = { event: event, duration: null };
@@ -348,71 +293,6 @@ var CalendarComponent = /** @class */ (function () {
                 elem[i].dispatchEvent(widgetEvent);
             }
         };
-        this.options.eventDragStart = function (event, jsEvent, ui, view) {
-            var /** @type {?} */ detail = { event: event, jsEvent: jsEvent, ui: ui, view: view };
-            var /** @type {?} */ widgetEvent = new CustomEvent('eventDragStart', {
-                bubbles: true,
-                detail: detail
-            });
-            elem[0].dispatchEvent(widgetEvent);
-        };
-        this.options.eventDragStop = function (event, jsEvent, ui, view) {
-            var /** @type {?} */ detail = { event: event, jsEvent: jsEvent, ui: ui, view: view };
-            var /** @type {?} */ widgetEvent = new CustomEvent('eventDragStop', {
-                bubbles: true,
-                detail: detail
-            });
-            elem[0].dispatchEvent(widgetEvent);
-        };
-        this.options.eventMouseover = function (event, jsEvent, view) {
-            var /** @type {?} */ detail = { event: event, jsEvent: jsEvent, view: view };
-            var /** @type {?} */ widgetEvent = new CustomEvent('eventMouseover', {
-                bubbles: true,
-                detail: detail
-            });
-            elem[0].dispatchEvent(widgetEvent);
-        };
-        this.options.eventMouseout = function (event, jsEvent, view) {
-            var /** @type {?} */ detail = { event: event, jsEvent: jsEvent, view: view };
-            var /** @type {?} */ widgetEvent = new CustomEvent('eventMouseout', {
-                bubbles: true,
-                detail: detail
-            });
-            elem[0].dispatchEvent(widgetEvent);
-        };
-        this.options.drop = function (date, jsEvent, ui, resourceId) {
-            var /** @type {?} */ detail = { date: date, jsEvent: jsEvent, ui: ui, resourceId: resourceId };
-            var /** @type {?} */ widgetEvent = new CustomEvent('drop', {
-                bubbles: true,
-                detail: detail
-            });
-            // probably need to add an event - not handled!
-            elem[0].dispatchEvent(widgetEvent);
-        };
-        this.options.eventReceive = function (event) {
-            var /** @type {?} */ detail = { event: event };
-            var /** @type {?} */ widgetEvent = new CustomEvent('eventReceive', {
-                bubbles: true,
-                detail: detail
-            });
-            elem[0].dispatchEvent(widgetEvent);
-        };
-        this.options.dayRender = function (date, cell) {
-            var /** @type {?} */ detail = { date: date, cell: cell };
-            var /** @type {?} */ widgetEvent = new CustomEvent('dayRender', {
-                bubbles: true,
-                detail: detail
-            });
-            elem[0].dispatchEvent(widgetEvent);
-        };
-        this.options.resourceRender = function (resourceObj, labelTds, bodyTds) {
-            var /** @type {?} */ detail = { resourceObj: resourceObj, labelTds: labelTds, bodyTds: bodyTds };
-            var /** @type {?} */ widgetEvent = new CustomEvent('resourceRender', {
-                bubbles: true,
-                detail: detail
-            });
-            elem[0].dispatchEvent(widgetEvent);
-        };
     };
     /**
      * @param {...?} args
@@ -479,47 +359,35 @@ var CalendarComponent = /** @class */ (function () {
         }
     };
     CalendarComponent.decorators = [
-        { type: _angular_core.Component, args: [{
+        { type: Component, args: [{
+                    // tslint:disable-next-line
                     selector: 'ng-fullcalendar',
                     template: '',
                 },] },
     ];
     /** @nocollapse */
     CalendarComponent.ctorParameters = function () { return [
-        { type: _angular_core.ElementRef, },
-        { type: _angular_core.NgZone, },
+        { type: ElementRef, },
+        { type: NgZone, },
     ]; };
     CalendarComponent.propDecorators = {
-        "eventsModel": [{ type: _angular_core.Input, args: ['eventsModel',] },],
-        "eventsModelChange": [{ type: _angular_core.Output },],
-        "options": [{ type: _angular_core.Input },],
-        "eventDrop": [{ type: _angular_core.Output },],
-        "eventResize": [{ type: _angular_core.Output },],
-        "eventResizeStart": [{ type: _angular_core.Output },],
-        "eventResizeStop": [{ type: _angular_core.Output },],
-        "eventClick": [{ type: _angular_core.Output },],
-        "clickButton": [{ type: _angular_core.Output },],
-        "windowResize": [{ type: _angular_core.Output },],
-        "viewRender": [{ type: _angular_core.Output },],
-        "eventAfterRender": [{ type: _angular_core.Output },],
-        "eventAfterAllRender": [{ type: _angular_core.Output },],
-        "viewDestroy": [{ type: _angular_core.Output },],
-        "eventRender": [{ type: _angular_core.Output },],
-        "eventDestroy": [{ type: _angular_core.Output },],
-        "eventMouseOver": [{ type: _angular_core.Output },],
-        "eventMouseOut": [{ type: _angular_core.Output },],
-        "initialized": [{ type: _angular_core.Output },],
-        "select": [{ type: _angular_core.Output },],
-        "unselect": [{ type: _angular_core.Output },],
-        "dayClick": [{ type: _angular_core.Output },],
-        "navLinkDayClick": [{ type: _angular_core.Output },],
-        "navLinkWeekClick": [{ type: _angular_core.Output },],
-        "eventDragStart": [{ type: _angular_core.Output },],
-        "eventDragStop": [{ type: _angular_core.Output },],
-        "drop": [{ type: _angular_core.Output },],
-        "eventReceive": [{ type: _angular_core.Output },],
-        "dayRender": [{ type: _angular_core.Output },],
-        "resourceRender": [{ type: _angular_core.Output },],
+        "eventsModel": [{ type: Input, args: ['eventsModel',] },],
+        "eventsModelChange": [{ type: Output },],
+        "options": [{ type: Input },],
+        "eventDrop": [{ type: Output },],
+        "eventResize": [{ type: Output },],
+        "eventClick": [{ type: Output },],
+        "clickButton": [{ type: Output },],
+        "windowResize": [{ type: Output },],
+        "viewRender": [{ type: Output },],
+        "viewDestroy": [{ type: Output },],
+        "eventRender": [{ type: Output },],
+        "initialized": [{ type: Output },],
+        "select": [{ type: Output },],
+        "unselect": [{ type: Output },],
+        "dayClick": [{ type: Output },],
+        "navLinkDayClick": [{ type: Output },],
+        "navLinkWeekClick": [{ type: Output },],
     };
     return CalendarComponent;
 }());
@@ -532,13 +400,11 @@ var FullCalendarModule = /** @class */ (function () {
     function FullCalendarModule() {
     }
     FullCalendarModule.decorators = [
-        { type: _angular_core.NgModule, args: [{
+        { type: NgModule, args: [{
                     declarations: [CalendarComponent],
                     exports: [CalendarComponent],
                 },] },
     ];
-    /** @nocollapse */
-    FullCalendarModule.ctorParameters = function () { return []; };
     return FullCalendarModule;
 }());
 
@@ -575,12 +441,5 @@ var UpdateEventModel = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-exports.FullCalendarModule = FullCalendarModule;
-exports.CalendarComponent = CalendarComponent;
-exports.ButtonClickModel = ButtonClickModel;
-exports.UpdateEventModel = UpdateEventModel;
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
-//# sourceMappingURL=ng-fullcalendar.umd.js.map
+export { FullCalendarModule, CalendarComponent, ButtonClickModel, UpdateEventModel };
+//# sourceMappingURL=ng-retro-fullcalendar.es5.js.map

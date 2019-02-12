@@ -1,3 +1,6 @@
+# NOTE: This fork is compatible with FullCalendar 3.9.0. Once the main branch support it as well, this branch will be obsolete
+
+
 # Angular fullcalendar module
 Jquery fullcalendar module [FullCalendar](https://fullcalendar.io) 
 
